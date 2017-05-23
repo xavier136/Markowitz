@@ -42,15 +42,16 @@ int  main (int  argc, char  *argv[])
 	
 	Vector returns = averageReturn(returnMatrix, window, numberAssets);
 	Matrix covar_mat = covarianceMatrix(returnMatrix, window, numberAssets, returns);
+	Markowitz model(0.000001, 200000);	
+	Portfolio portfolio(0.2);
+	portfolio.compute_weights(model, covar_mat, returns);
+	portfolio.compute_volatility(covar_mat);
+	portfolio.compute_return(returns);
+	double sigma = portfolio.get_volatility();
+	double r = portfolio.get_return();
+	cout << "Portfolio's volatility: " << sigma << endl;
+	cout << "Portfolio's return: " << r << endl;
 
-	Markowitz model(0.01, 100000);
-	Matrix Q = model.gradientMethod(covar_mat, returns);
-
-
-	cout << "La matrice est de taille: " << Q.size() << endl;
-
-	Portfolio portfolio(0.1);
-	cout << "Portfolio's target return: " << portfolio.get_target_return() << endl;
     
     for(int i=0;i<numberAssets;i++)
 		delete[] returnMatrix[i];

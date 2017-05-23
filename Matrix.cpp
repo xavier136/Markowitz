@@ -21,6 +21,14 @@ Vector operator+(const Vector& V,const Vector& W)
    return U;
 }
 
+Vector operator-(const Vector & V, const Vector & W)
+{
+	int d = V.size();
+	Vector U(d);
+	for (int j = 0; j<d; j++) U[j] = V[j] - W[j];
+	return U;
+}
+
 Vector operator+(const double& a,const Vector& V)
 {
    int d = V.size();
@@ -61,7 +69,7 @@ double operator^(const Vector& V,const Vector& W)
    return sum;
 }
 
-Matrix product(const Matrix& A, const Matrix& B)
+Matrix operator*(const Matrix& A, const Matrix& B)
 {
 	int d = A.size();
 	int c = B[0].size();
@@ -73,6 +81,18 @@ Matrix product(const Matrix& A, const Matrix& B)
 			W[j][i] = 0.0;
 			for (int l = 0; l<d; l++) W[j][i] = W[j][i] + A[j][l] * B[l][i];
 		}
+	}
+	return W;
+}
+
+Vector operator*(const Vector & A, const Matrix & B)
+{
+	int d = A.size();
+	int c = B[0].size();
+	Vector W(c);
+	for (int i = 0; i < c; i++)
+	{
+		for (int l = 0; l<d; l++) W[i] = W[i] + A[l] * B[l][i];
 	}
 	return W;
 }

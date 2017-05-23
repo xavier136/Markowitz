@@ -11,9 +11,11 @@ Vector operator*(const Matrix& C,const Vector& V);
 Vector operator*(const double& a,const Vector& V);
 Vector operator+(const double& a,const Vector& V);
 Vector operator+(const Vector& V,const Vector& W);
+Vector operator-(const Vector& V, const Vector& W);
 Vector operator*(const Vector& V,const Vector& W);
 Vector exp(const Vector& V);
-Matrix product(const Matrix& A, const Matrix& B);
+Matrix operator*(const Matrix& A, const Matrix& B);
+Vector operator*(const Vector& A, const Matrix& B);
 Matrix vectorTranspose(const Vector& V);
 double operator^(const Vector& V,const Vector& W);
 
