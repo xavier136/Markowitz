@@ -1,4 +1,4 @@
-#include "Portfolio.h"
+#include "../Headers/Portfolio.h"
 #include <cmath>
 
 void Portfolio::compute_weights(Markowitz model, Matrix covar_mat, Vector returns)

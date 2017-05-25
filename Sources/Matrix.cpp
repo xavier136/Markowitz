@@ -1,4 +1,4 @@
-#include "Matrix.h"
+#include "../Headers/Matrix.h"
 #include <cmath>
 
 Vector operator*(const Matrix& C,const Vector& V)

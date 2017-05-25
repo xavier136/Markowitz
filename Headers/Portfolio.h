@@ -2,8 +2,8 @@
 #define Portfolio_h
 
 #include <vector>
-#include "Matrix.h"
-#include "Markowitz.h"
+#include "../Headers/Matrix.h"
+#include "../Headers/Markowitz.h"
 
 using namespace std;
 
@@ -24,7 +24,6 @@ private:
 	double portfolio_volatility;
 	double portfolio_target_return;
 	Vector portfolio_weights;
-
 
 };
 

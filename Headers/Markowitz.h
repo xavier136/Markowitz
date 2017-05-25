@@ -1,6 +1,6 @@
 #ifndef Markowitz_h
 #define Markowitz_h
-#include "Matrix.h"
+#include "../Headers/Matrix.h"
 
 using namespace std;
 
