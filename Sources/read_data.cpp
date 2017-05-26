@@ -13,35 +13,22 @@ int  main (int  argc, char  *argv[])
 	int window = 100;
 	int numberAssets = 83;
 	int numberReturns = 700;
+	int testing_window = 12;
+	double accuracy = 0.000001;
+	int max_iter = 200000;
     
+	//list of target returns
 	Vector v;
 	v.push_back(0.0);
 	v.push_back(0.05);
 	v.push_back(0.1);
 
-	BackTest backtest(83, 700, 100, 12, v);
+	//BackTest Execution
+	BackTest backtest(numberAssets, numberReturns, window, testing_window, v, accuracy , max_iter);
 	backtest.getData();
 	backtest.initBackTest();
-	double **returnMatrix = backtest.get_returnData();
 	backtest.runBackTest();
-
-	//cout << "Method 2: " << returnMatrix[0][0] << endl;
-
-	
-	//Vector returns = averageReturn(returnMatrix, window, numberAssets);
-	//Matrix covar_mat = covarianceMatrix(returnMatrix, window, numberAssets, returns);
-	Markowitz model(0.000001, 200000);	
-	Portfolio portfolio(0.2);
-	//portfolio.compute_weights(model, covar_mat, returns);
-	//portfolio.compute_volatility(covar_mat);
-	//portfolio.compute_return(returns);
-	//double sigma = portfolio.get_volatility();
-	//double r = portfolio.get_return();
-	//cout << "Portfolio's volatility: " << sigma << endl;
-	//cout << "Portfolio's return: " << r << endl;
-
-    
-	backtest.deleteData();
+  	backtest.deleteData();
    
 	return 0;
 }

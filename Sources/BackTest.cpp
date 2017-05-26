@@ -6,6 +6,8 @@
 #include <sstream>
 #include <cstring>
 #include "../Headers/csv.h"
+#include <fstream>
+
 
 double string_to_double(const std::string& s)
 {
@@ -40,6 +42,7 @@ void readData(double **data, string fileName)
 	else { cout << fileName << " missing\n";exit(0); }
 }
 
+//computes the average return for each asset over a fixed period
 Vector averageReturn(double **data, int window, int numberAssets)
 {
 	double mean = 0;
@@ -57,7 +60,7 @@ Vector averageReturn(double **data, int window, int numberAssets)
 	}
 	return returns;
 }
-
+//computes the variance covariance matrix of the assets over a fixed period
 Matrix covarianceMatrix(double **data, int window, int numberAssets, Vector& average_returns)
 {
 	double covariance = 0;
@@ -81,7 +84,7 @@ Matrix covarianceMatrix(double **data, int window, int numberAssets, Vector& ave
 }
 
 
-
+// retrieves the data from the csv file
 void BackTest::getData()
 {
 	double **returnMatrix = new double*[num_assets]; // a matrix to store the return data
@@ -95,6 +98,7 @@ void BackTest::getData()
 	returnData = returnMatrix;
 }
 
+// delete the return data matrix from the memory
 void BackTest::deleteData()
 {
 	for (int i = 0;i<num_assets;i++)
@@ -102,6 +106,7 @@ void BackTest::deleteData()
 	delete[] returnData;
 }
 
+// initializes the backtest and builds the portfolios
 void BackTest::initBackTest()
 {
 	vector<Portfolio> new_portfolios;
@@ -113,18 +118,24 @@ void BackTest::initBackTest()
 	portfolios = new_portfolios;
 }
 
+// runs the full backTest
 void BackTest::runBackTest()
 {
 	int start = 0;
 	int finish = in_sample_size + start;
 
+	// initializes the training data matrix
 	double **training_data = new double*[num_assets]; 
 	for (int i = 0;i< num_assets;i++)
 		training_data[i] = new double[in_sample_size];
 
+	// initializes the testing data matrix
 	double **testing_data = new double*[num_assets];
 	for (int i = 0;i< num_assets;i++)
 		testing_data[i] = new double[out_sample_size];
+
+	ofstream myfile;
+	myfile.open("BackTest.csv");
 	
 
 	while (start <= (num_returns - in_sample_size - out_sample_size))
@@ -153,23 +164,44 @@ void BackTest::runBackTest()
 		Vector average_testing_returns = averageReturn(testing_data, out_sample_size, num_assets);
 		Matrix testing_covar_mat = covarianceMatrix(testing_data, out_sample_size, num_assets, average_testing_returns);
 
-		Markowitz model(0.000001, 200000);
+		Markowitz model(accuracy, iterations);
 
 		for (int i = 0; i < portfolios.size(); i++)
 		{
+			//computes the weights using the in_sample data
 			portfolios[i].compute_weights(model, training_covar_mat, average_training_returns);
+			//computes the return and volatility using the out_sample data and weights
 			portfolios[i].compute_return(average_testing_returns);
 			portfolios[i].compute_volatility(testing_covar_mat);
 
-			cout << "Portfolio " << i + 1 << " oos return : " << portfolios[i].get_return() << "oos volatility : " << portfolios[i].get_volatility() << endl;
+			cout << "Portfolio " << i + 1 << " oos return : " << portfolios[i].get_return() << " oos volatility : " << portfolios[i].get_volatility() << endl;
+
+			myfile << portfolios[i].get_return();
+			myfile << ",";
+			myfile << portfolios[i].get_volatility();
+			 
+			if (i != (portfolios.size() - 1)) myfile << ",";
 
 		}
+
+		myfile << endl;
 
 		cout << "------------------------------------------" << endl;
 		
 		start += 12;
 		finish = in_sample_size + start;
 	}
+
+	myfile.close();
+
+	for (int i = 0;i<num_assets;i++)
+		delete[] training_data[i];
+	delete[] training_data;
+
+	for (int i = 0;i<num_assets;i++)
+		delete[] testing_data[i];
+	delete[] testing_data;
+
 
 }
 

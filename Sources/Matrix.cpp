@@ -69,6 +69,7 @@ double operator^(const Vector& V,const Vector& W)
    return sum;
 }
 
+//matrices product
 Matrix operator*(const Matrix& A, const Matrix& B)
 {
 	int d = A.size();
@@ -85,6 +86,7 @@ Matrix operator*(const Matrix& A, const Matrix& B)
 	return W;
 }
 
+//product vector*Matrix
 Vector operator*(const Vector & A, const Matrix & B)
 {
 	int d = A.size();
@@ -97,6 +99,7 @@ Vector operator*(const Vector & A, const Matrix & B)
 	return W;
 }
 
+//Transposes vectors
 Matrix vectorTranspose(const Vector& V)
 {
 	int d = V.size();
