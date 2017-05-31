@@ -3,6 +3,7 @@
 
 using namespace std;
 
+//method for the mean variance optimization
 Vector Markowitz::gradientMethod(Matrix& covar_mat, Vector& returns, double target)
 {
 	double d = covar_mat.size();
@@ -41,12 +42,14 @@ Vector Markowitz::gradientMethod(Matrix& covar_mat, Vector& returns, double targ
 		}
 	}
 
+
 	//Builds the B vector
 	Vector B(Q.size());
 
 	for (int i = 0; i < d; i++) B[i] = 0;
 	B[d] = -target;
 	B[d + 1] = -1;
+
 
 	//Builds initial point X0: in this case equally weighted portfolio
 	Vector X0(Q.size());

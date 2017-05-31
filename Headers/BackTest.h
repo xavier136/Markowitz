@@ -9,7 +9,7 @@
 class BackTest
 {
 	public:
-		BackTest(int num_assets_, int num_returns_, int in_sample_size_, int out_sample_size_, Vector target_returns_, double accuracy_, int iterations_)
+		BackTest(int num_assets_, int num_returns_, int in_sample_size_, int out_sample_size_, Vector& target_returns_, double accuracy_, int iterations_)
 		{ 
 			num_assets = num_assets_;
 			num_returns = num_returns_;

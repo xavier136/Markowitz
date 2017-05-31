@@ -1,6 +1,7 @@
 #include "../Headers/Matrix.h"
 #include <cmath>
 
+//Product Matrix Vector
 Vector operator*(const Matrix& C,const Vector& V)
 {
    int d = C.size();
@@ -13,6 +14,7 @@ Vector operator*(const Matrix& C,const Vector& V)
    return W;
 }
 
+//Sum vectors
 Vector operator+(const Vector& V,const Vector& W)
 {
    int d = V.size();
@@ -21,6 +23,7 @@ Vector operator+(const Vector& V,const Vector& W)
    return U;
 }
 
+//Substraction vectors
 Vector operator-(const Vector & V, const Vector & W)
 {
 	int d = V.size();
@@ -29,6 +32,7 @@ Vector operator-(const Vector & V, const Vector & W)
 	return U;
 }
 
+//Sum constant and vector
 Vector operator+(const double& a,const Vector& V)
 {
    int d = V.size();
@@ -37,6 +41,7 @@ Vector operator+(const double& a,const Vector& V)
    return U;
 }
 
+//Product constant and vector
 Vector operator*(const double& a,const Vector& V)
 {
    int d = V.size();
@@ -45,6 +50,7 @@ Vector operator*(const double& a,const Vector& V)
    return U;
 }
 
+//Product of vectors
 Vector operator*(const Vector& V,const Vector& W)
 {
    int d = V.size();
@@ -53,6 +59,7 @@ Vector operator*(const Vector& V,const Vector& W)
    return U;
 }
 
+//Exponential vector
 Vector exp(const Vector& V)
 {
    int d = V.size();
@@ -61,6 +68,7 @@ Vector exp(const Vector& V)
    return U;
 }
 
+//Power vectors
 double operator^(const Vector& V,const Vector& W)
 {
    double sum = 0.0;

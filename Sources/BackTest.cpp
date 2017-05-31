@@ -8,7 +8,7 @@
 #include "../Headers/csv.h"
 #include <fstream>
 
-
+//converts string to double
 double string_to_double(const std::string& s)
 {
 	std::istringstream i(s);
@@ -18,6 +18,7 @@ double string_to_double(const std::string& s)
 	return x;
 }
 
+//reads data from the data csv file
 void readData(double **data, string fileName)
 {
 	char tmp[20];
@@ -98,7 +99,7 @@ void BackTest::getData()
 	returnData = returnMatrix;
 }
 
-// delete the return data matrix from the memory
+// deletes the return data matrix from the memory
 void BackTest::deleteData()
 {
 	for (int i = 0;i<num_assets;i++)
@@ -134,10 +135,10 @@ void BackTest::runBackTest()
 	for (int i = 0;i< num_assets;i++)
 		testing_data[i] = new double[out_sample_size];
 
-	ofstream myfile;
-	myfile.open("BackTest.csv");
+	ofstream myfile1, myfile2;
+	myfile1.open("BackTest_returns.csv");
+	myfile2.open("BackTest_variances.csv");
 	
-
 	while (start <= (num_returns - in_sample_size - out_sample_size))
 	{
 		//builds the training dataset
@@ -170,21 +171,30 @@ void BackTest::runBackTest()
 		{
 			//computes the weights using the in_sample data
 			portfolios[i].compute_weights(model, training_covar_mat, average_training_returns);
+
 			//computes the return and volatility using the out_sample data and weights
 			portfolios[i].compute_return(average_testing_returns);
 			portfolios[i].compute_volatility(testing_covar_mat);
 
 			cout << "Portfolio " << i + 1 << " oos return : " << portfolios[i].get_return() << " oos volatility : " << portfolios[i].get_volatility() << endl;
 
-			myfile << portfolios[i].get_return();
-			myfile << ",";
-			myfile << portfolios[i].get_volatility();
-			 
-			if (i != (portfolios.size() - 1)) myfile << ",";
+			//saves the returns and variances into two separated csv files
+			myfile1 << portfolios[i].get_return();
+			myfile2 << portfolios[i].get_variance();
+
+			if (i != (portfolios.size() - 1))
+			{
+				myfile1 << ",";
+				myfile2 << ",";
+
+			}
+			
 
 		}
 
-		myfile << endl;
+		myfile1 << endl;
+		myfile2 << endl;
+
 
 		cout << "------------------------------------------" << endl;
 		
@@ -192,15 +202,19 @@ void BackTest::runBackTest()
 		finish = in_sample_size + start;
 	}
 
-	myfile.close();
-
+	//deletes training dataset
 	for (int i = 0;i<num_assets;i++)
 		delete[] training_data[i];
 	delete[] training_data;
 
+	//deletes testing dataset
 	for (int i = 0;i<num_assets;i++)
 		delete[] testing_data[i];
 	delete[] testing_data;
+
+	//close files
+	myfile1.close();
+	myfile2.close();
 
 
 }
